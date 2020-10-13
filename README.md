@@ -43,7 +43,5 @@ export LDFLAGS=\"-L$(pwd)/install/Linux/x64/Debug/bin\"
 
 export CFLAGS=\"-I$(pwd)/install/Linux/x64/Debug/include\"
 
-cd ../examples
-
 make
 ```
