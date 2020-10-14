@@ -54,13 +54,11 @@ make
 ```
 cd openvx_ws
 
-git clone https://github.com/rgiduthuri/openvx_tutorial.git
-
-cd openvx_ws
+cd examples
 
 mkdir build && cd build
 
-gcc ../openvx_tutorial/book_samples/example1/example1.c -I ../openvx_sample/include/ -L ../openvx_sample/install/Linux/x64/Debug/bin/ -l openvx -L ../openvx_sample/install/Linux/x64/Debug/bin/ -l vxu -o example1
+gcc ../example1/example1.c -I ../../openvx_sample/include/ -L ../../openvx_sample/install/Linux/x64/Debug/bin/ -l openvx -L ../../openvx_sample/install/Linux/x64/Debug/bin/ -l vxu -o example1
 
 ./example1
 ```
