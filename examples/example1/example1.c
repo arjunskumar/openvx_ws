@@ -10,10 +10,19 @@
 /* Steps
 1) Create an OpenVX context
 2) Create an image that is a white rectangle on a black background
-3) Locate the corners in the image, using the Fast Corners algorithm with
-and without non-maximum suppression
+3) Locate the corners in the image, using the Fast Corners algorithm with and without non-maximum suppression
 4) Display the results
 
+
+*/
+
+/*** Non-maximal Suppression ***/
+
+/* Detecting multiple interest points in adjacent locations is another problem. It is solved by using Non-maximum Suppression.
+
+1) Compute a score function, V for all the detected feature points. V is the sum of absolute difference between p and 16 surrounding pixels values.
+2) Consider two adjacent keypoints and compute their V values.
+3) Discard the one with lower V value.
 
 */
 
@@ -71,12 +80,15 @@ int main(){
 
     vx_float32 strength_thresh_value = 128.0;
     vx_scalar strength_thresh = vxCreateScalar(context, VX_TYPE_FLOAT32, & strength_thresh_value);
+
+    // 100 - capacity)
     vx_array corners = vxCreateArray(context, VX_TYPE_KEYPOINT, 100);
     vx_array corners1 = vxCreateArray(context, VX_TYPE_KEYPOINT, 100);
 
     vx_size num_corners_value = 0;
     vx_scalar num_corners = vxCreateScalar(context, VX_TYPE_SIZE, &num_corners_value);
     vx_scalar num_corners1 = vxCreateScalar(context, VX_TYPE_SIZE, &num_corners_value);
+    // struct vx_keypoint_t 
     vx_keypoint_t *kp = calloc(100, sizeof(vx_keypoint_t));
 
     errorCheck(&context, kp == NULL || 
@@ -87,14 +99,16 @@ int main(){
             vxGetStatus((vx_reference)num_corners1),
             "Could not create parameters for FastCorners");
 
-    errorCheck(&context, vxuFastCorners(context, image1, strength_thresh, vx_true_e, corners, num_corners), "Fast Corners function failed");
+    // If true, non-maximum suppression is applied to detected corners before being places in the vx_array of VX_TYPE_KEYPOINT structs.
 
+    errorCheck(&context, vxuFastCorners(context, image1, strength_thresh, vx_true_e, corners, num_corners), "Fast Corners function failed");
     errorCheck(&context, vxuFastCorners(context, image1, strength_thresh, vx_false_e, corners1, num_corners1), "Fast Corners fuction failed");
 
+    // VX_READ_ONLY means that data are copied from the scalar object into the user memory.
     errorCheck(&context, vxCopyScalar(num_corners, &num_corners_value, VX_READ_ONLY, VX_MEMORY_TYPE_HOST), "vxCopyScalar failed");
 
     printf("Found %zu corners with non-max suppression \n",num_corners_value );
-    
+    // 0 - array range start, num_corners_value - array range end
     errorCheck(&context, vxCopyArrayRange(corners, 0, num_corners_value, sizeof(vx_keypoint_t), kp, VX_READ_ONLY, VX_MEMORY_TYPE_HOST), "vxCopyArrayRange failed");
     
     for (int i = 0; i <num_corners_value; i++){
@@ -113,6 +127,7 @@ int main(){
     }
     // free kp
     free(kp);
+
     // Release the context
     vxReleaseContext(&context);
     return 0;
