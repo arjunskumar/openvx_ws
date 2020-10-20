@@ -51,6 +51,7 @@ make
 ```
 ## Run example code
 
+### Running example1-3
 ```
 cd openvx_ws
 
@@ -61,4 +62,35 @@ mkdir build && cd build
 gcc ../example1/example1.c -I ../../openvx_sample/include/ -L ../../openvx_sample/install/Linux/x64/Debug/bin/ -l openvx -L ../../openvx_sample/install/Linux/x64/Debug/bin/ -l vxu -o example1
 
 ./example1
+```
+
+### Running example4
+```
+cd build
+
+gcc ../example4/example4.c -I ../../openvx_sample/include/ -L ../../openvx_sample/install/Linux/x64/Debug/bin/ -l openvx -o example4
+
+./example4
+```
+
+### Running example4a
+
+```
+cd build
+
+gcc ../example4/example4a.c ../../examples/ppm-io/writeImage.c -I ../../openvx_sample/include/ -I ../../examples/ppm-io/ -L ../../openvx_sample/install/Linux/x64/Debug/bin/ -l openvx -o example4a
+
+./example4a
+```
+### Running changeImage
+```
+cd build 
+
+gcc ../example4/changeImage.c ../../examples/ppm-io/readImage.c ../../examples/ppm-io/writeImage.c -I ../../openvx_sample/include/ -I ../../examples/ppm-io/ -L ../../openvx_sample/install/Linux/x64/Debug/bin/ -l openvx -o changeImage
+
+ sudo apt-get install imagemagick
+
+ convert image.png image.ppm
+
+./changeImage image.ppm image_output.ppm
 ```
