@@ -34,14 +34,19 @@ vx_graph makeTestGraph(vx_context context, vx_image image, vx_image output)
     /* Do some arbitrary processing on the imput image */
     /* First, make a true greyscale image. We do this by converting to YUV
     and extracting the Y. */
+
+    // graph, input image, output image --> convert RGB to YUV
     vxColorConvertNode(graph, image, virtsyuv[0]);
+    // graph, input image, channel, output image --> Extract Y channel
     vxChannelExtractNode(graph, virtsyuv[0], VX_CHANNEL_Y, virts8[0]);
 
     /* Use a Canny detector on the greyscale image to find edges */
     vxCannyEdgeDetectorNode(graph, virts8[0], hyst, 5, VX_NORM_L1, virts8[1]);
 
     /* Make the edges black and AND the edges back with the Y value so as to super-impose a black background */
+    // input-->output
     vxNotNode(graph, virts8[1], virts8[2]);
+    // input, input --> ouput
     vxAndNode(graph, virts8[0], virts8[2], virts8[3]);
 
     /* Get the U and V channels as well.. */

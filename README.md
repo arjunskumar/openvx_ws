@@ -83,6 +83,9 @@ gcc ../example4/example4a.c ../../examples/ppm-io/writeImage.c -I ../../openvx_s
 ./example4a
 ```
 ### Running changeImage
+
+[<img src="docs/changeImage.png" width="640"/>](docs/changeImage.png)  
+
 ```
 cd build 
 
